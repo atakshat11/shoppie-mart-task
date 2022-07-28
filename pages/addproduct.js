@@ -1,9 +1,8 @@
-
 import { useState } from "react";
-import {parseCookies} from "nookies";
-import { toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
-  import baseUrl from '../helpers/baseUrl'
+import { parseCookies } from "nookies";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import baseUrl from "../helpers/baseUrl";
 const AddProduct = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -11,18 +10,18 @@ const AddProduct = () => {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
 
- const productDataSaved=()=>{
-  console.log('Data Saved from Method!')
-  toast.success('Product Data Saved Successfully!', {
-    position: toast.POSITION.TOP_RIGHT
-  })
- }
- const productDataErr=()=>{
-  console.log('Data Error from Method!')
-  toast.error('Product Data Not Saved,Try Again!',{
-    position: toast.POSITION.TOP_RIGHT
-  })
- }
+  const productDataSaved = () => {
+    console.log("Data Saved from Method!");
+    toast.success("Product Data Saved Successfully!", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  };
+  const productDataErr = () => {
+    console.log("Data Error from Method!");
+    toast.error("Product Data Not Saved,Try Again!", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  };
 
   const handleSubmit = async (e) => {
     console.log("add product");
@@ -46,11 +45,11 @@ const AddProduct = () => {
       });
       const res2 = await res.json();
       if (res2.error) {
-      productDataErr()
-        console.log(res2.error)
+        productDataErr();
+        console.log(res2.error);
       } else {
-        productDataSaved()
-        console.log('Data Saved!')
+        productDataSaved();
+        console.log("Data Saved!");
       }
     } catch (err) {
       console.log(err);
@@ -159,25 +158,22 @@ const AddProduct = () => {
           Add New Product
         </button>
       </form>
-     
- </div>
-    
+    </div>
   );
 };
-export async function getServerSideProps(ctx){
-  const cookie = parseCookies(ctx)
-  console.log('cookie',cookie)
-   const user =  cookie.user ? JSON.parse(cookie.user) : ""
-   console.log('user',user)
-  if(user.role == 'user' || user.role == '' ){
-      const {res} = ctx
-      res.writeHead(302,{Location:"/"})
-      res.end()
+export async function getServerSideProps(ctx) {
+  const cookie = parseCookies(ctx);
+  console.log("cookie", cookie);
+  const user = cookie.user ? JSON.parse(cookie.user) : "";
+  console.log("user", user);
+  if (user.role == "user" || user.role == "") {
+    const { res } = ctx;
+    res.writeHead(302, { Location: "/" });
+    res.end();
   }
-
 
   return {
-      props:{}
-  }
+    props: {},
+  };
 }
 export default AddProduct;

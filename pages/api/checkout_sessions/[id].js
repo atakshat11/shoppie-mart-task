@@ -9,10 +9,18 @@ export default async function handler(req, res) {
     if (!id.startsWith('cs_')) {
       throw Error('Incorrect CheckoutSession ID.');
     }
-    const checkout_session = await stripe.checkout.sessions.retrieve(id);
+  const sessiono = await stripe.checkout.sessions.retrieve(id,{
+    expand: ['line_items'],
+  });
+  console.log('session recieve data..........',sessiono)
+  // // note there may be more than one line item, but this is how you access the price ID.
+  // console.log(sessiono.line_items.data[0].price.id);
+  // // the product ID is accessible on the Price object.
+  // console.log(sessiono.line_items.data[0].price.product);
+  //   res.status(200).json(sessiono);
 
-    res.status(200).json(checkout_session);
   } catch (err) {
+    console.log('check id err',err)
     res.status(500).json({ statusCode: 500, message: err.message });
   }
 }

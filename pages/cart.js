@@ -9,7 +9,7 @@ import OrderAmount from "../components/OrderAmount";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import baseUrl from '../helpers/baseUrl'
 const Cart = ({ token, error, products }) => {
-  const router = useRouter();
+const router = useRouter();
 
   console.log("token in cart", token);
   if (!token) {
@@ -59,7 +59,7 @@ const Cart = ({ token, error, products }) => {
                 </Col>
                 {/*ORDER AMOUNT SECTION */}
                 <Col md={4}>
-                  <OrderAmount products={products} />
+                  <OrderAmount products={products}/>
                   
                  
                 </Col>
@@ -83,7 +83,8 @@ const Cart = ({ token, error, products }) => {
 export default Cart;
 
 export async function getServerSideProps(ctx) {
-  const { token } = parseCookies(ctx);
+  const { token,user } = parseCookies(ctx);
+  console.log('prodyct userrr',user)
   if (!token) {
     return {
       props: { products: [] },
@@ -103,6 +104,6 @@ export async function getServerSideProps(ctx) {
   }
   console.log("products", products);
   return {
-    props: { products, token },
+    props: { products, token,user },
   };
 }

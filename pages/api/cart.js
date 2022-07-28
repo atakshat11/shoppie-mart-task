@@ -1,7 +1,7 @@
 import Cart from "../../models/Cart";
 import Authenticated from "../../helpers/Authenticated";
 import initDb from "../../helpers/initDB";
-// import product from '../../models/Product'
+
 
 initDb();
 

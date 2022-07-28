@@ -1,70 +1,53 @@
 import React, { useEffect, useState } from "react";
 import { Card, Col, ListGroup, Row, Button } from "react-bootstrap";
-import StripeCheckout from "react-stripe-checkout";
-import axios from  'axios'
 import getStripe from "../helpers/get-stripe";
 import baseUrl from "../helpers/baseUrl";
+
+const redirectToCheckout = async (products) => {
+  console.log('redirect product detail 2',products)
+  const data=products.map((i) =>
+   ({
+ 
+    currency: 'INR',
+    name:'https://dashboard.stripe.com/b/acct_1LPMS1SB9jHHvF3Z' && i.product.name,
+    amount:i.product.price * 100,
+    price:i.price,
+    quantity:i.quantity,
+    images:[i.product.mediaUrl]
+  })
+  )
+console.log('item',data)
+
+try {
+
+  const res = await fetch(`${baseUrl}/api/checkout_sessions`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+   data
+    }),
+  });
+var res2 = await res.json();
+  console.log('res2',res2)
+  if (res2.error) {
+    console.log('res2 error',res2.error)
+  } else {
+    console.log('Data Saved .......!')
+  }
+} catch (err) {
+  console.log('catch errr',err);
+}
+  // Redirect to checkout
+  const stripe = await getStripe();
+  await stripe.redirectToCheckout( {sessionId:res2.id} );
+
+ 
+};
 const OrderAmount = ({ products }) => {
-
-     const handleCheckout = async (paymentInfo) => {
-      console.log('payment-info',paymentInfo)
- // Create Stripe checkout
- const {
-  data: { id },
-} = await axios.post(`${baseUrl}/api/checkout_sessions`, {
-  items: Object.entries(paymentInfo).map(([{ id, quantity }]) => ({
-    price: id,
-    quantity,
-  })),
-});
-
-// Redirect to checkout
-const stripe = await getStripe();
-await stripe.redirectToCheckout({ sessionId: id });
-
-        // const {token}=parseCookies()
-        // console.log('token in cart dta handle check',token);
-        // console.log(paymentInfo)
-        // const res = await fetch(`${baseUrl}/api/payment`,{
-        //     method:"POST",
-        //     headers:{
-        //        "Content-Type":"application/json",
-        //       "Authorization":token 
-        //     },
-        //     body:JSON.stringify({
-        //         paymentInfo
-        //     })
-        // })
-        // const res2 = await res.json() 
-      };
-
-  const TotalPriceProceed = () => {
-
-    console.log("product total pricce data", products);
-    return (
-      <div
-        className="container"
-        style={{ display: "flex", justifyContent: "space-between" }}
-      >
-        {products.length > 0 && (
-          <StripeCheckout
-            name="Shoppie-Mart"
-            amount={(price > 1000 ? price : price + deliveryCharges) * 100}
-            image={products.length > 0 ? products[0].product.mediaUrl : ""}
-            currency="INR"
-            shippingAddress={true}
-            billingAddress={true}
-            zipCode={true}
-            stripeKey="pk_test_51LPMS1SB9jHHvF3Z4ZQOu2dSDWta7aBK9mvpCDfgrL1gh5wFpOFv52WdRqRxeIBBrAT8TrdJBV2idek1JF4ONweD00RxEHsfQs"
-            token={(paymentInfo) => handleCheckout(paymentInfo)}
-          >
-            <Button variant="success">Proceed To Checkout</Button>
-          </StripeCheckout>
-        )}
-      </div>
-    );
-  };
-
+  // console.log('redirect product detail 1',products)
+ 
   console.log("productdata", products);
   const list = products;
   const [price, setPrice] = useState(0);
@@ -138,7 +121,10 @@ await stripe.redirectToCheckout({ sessionId: id });
         </Card.Footer>
       </Card>
       <div style={{ margin: "20px 0px 0px 110px" }} className="fs-5">
-        <TotalPriceProceed />
+     
+        <Button variant="success" onClick={()=>redirectToCheckout(products)}>
+          Proceed To Checkout
+        </Button>
       </div>
     </>
   );

@@ -7,8 +7,9 @@ import baseUrl from '../helpers/baseUrl'
 const CartItem = ({ product }) => {
 
   console.log('product crt item',product)
-  const [setCartProduct] = useState(product);
+  const [cartProduct,setCartProduct] = useState(product);
   const { token } = parseCookies();
+  console.log(cartProduct)
   const handleRemove = async (pid) => {
     console.log("handle remove", pid);
     const res = await fetch(`${baseUrl}/api/cart`, {
