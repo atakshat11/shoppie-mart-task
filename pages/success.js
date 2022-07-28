@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import axios from "axios";
 import confetti from "canvas-confetti";
-
+import baseUrl from "../helpers/baseUrl";
 //Success Animation
 const shootFireWork = () => {
   const duration = 15 * 1000;
