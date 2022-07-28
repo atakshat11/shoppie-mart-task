@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import axios from "axios";
 import confetti from "canvas-confetti";
-
+import baseUrl from "../helpers/baseUrl";
 //Success Animation
 const shootFireWork = () => {
   const duration = 15 * 1000;
@@ -48,7 +48,7 @@ const Success = () => {
       return res.data;
     });
   const { data, error } = useSWR(
-    () => `/api/checkout_sessions/${session_id}`,
+    () => `${baseUrl}/api/checkout_sessions/${session_id}`,
     fetcher
   );
   console.log("success data", data);
