@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import axios from "axios";
 import confetti from "canvas-confetti";
-import baseUrl from "../helpers/baseUrl";
+
 //Success Animation
 const shootFireWork = () => {
   const duration = 15 * 1000;
@@ -43,11 +43,15 @@ const Success = () => {
     query: { session_id },
   } = useRouter();
   console.log("ev", session_id);
-  const fetcherdata = axios.get(`${baseUrl}/api/checkout_sessions/${session_id}`).then((res) => {
-     res.data;
+  const fetcher = (url) =>
+    axios.get(url).then((res) => {
+      return res.data;
     });
- 
-  console.log("success data",fetcherdata);
+  const { data, error } = useSWR(
+    () => `${baseUrl}/api/checkout_sessions/${session_id}`,
+    fetcher
+  );
+  console.log("success data", data);
   useEffect(() => {
     if (data) {
       console.log("success data");
