@@ -43,15 +43,11 @@ const Success = () => {
     query: { session_id },
   } = useRouter();
   console.log("ev", session_id);
-  const fetcher = (url) =>
-    axios.get(url).then((res) => {
-      return res.data;
+  const fetcherdata = axios.get(`${baseUrl}/api/checkout_sessions/${session_id}`).then((res) => {
+     res.data;
     });
-  const { data, error } = useSWR(
-    () => `${baseUrl}/api/checkout_sessions/${session_id}`,
-    fetcher
-  );
-  console.log("success data", data);
+ 
+  console.log("success data",fetcherdata);
   useEffect(() => {
     if (data) {
       console.log("success data");
